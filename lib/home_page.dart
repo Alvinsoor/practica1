@@ -1,17 +1,9 @@
-import 'dart:async';
-import 'dart:convert';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:practica1/bloc/background_bloc.dart';
-import 'package:practica1/providers/frase.dart';
-import 'package:practica1/providers/hora.dart';
-import 'package:practica1/providers/imagen.dart';
-
+import 'bloc/background_bloc.dart';
 import 'bloc/hour_bloc.dart';
+import 'bloc/phrase_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -120,14 +112,27 @@ class _HomePageState extends State<HomePage> {
                             },
                           ),
                           SizedBox(height: 150),
-                          ListTile(
-                            title: Text("I like big booty bitches.",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 22)),
-                            subtitle: Text("Descartes",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                )),
+                          BlocConsumer<PhraseBloc, PhraseState>(
+                            listener: (context, state) {},
+                            builder: (context, state) {
+                              if (state is PhraseErrorState) {
+                                return Center(
+                                    child: Text("Failure from Hour."));
+                              } else if (state is PhraseSuccessState) {
+                                return ListTile(
+                                  title: Text(state.quote,
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 22)),
+                                  subtitle: Text(state.author,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      )),
+                                );
+                              } else {
+                                return Center(
+                                    child: new CircularProgressIndicator());
+                              }
+                            },
                           )
                         ],
                       ),
