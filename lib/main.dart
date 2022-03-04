@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:practica1/providers/frase.dart';
 import 'home_page.dart';
+import 'package:provider/provider.dart';
 
 Map<int, Color> color = {
   50: Color.fromRGBO(136, 14, 79, .1),
@@ -25,8 +27,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primarySwatch: colorCustom),
-      home: HomePage(),
-    );
+        title: 'Practica 1',
+        theme: ThemeData(primarySwatch: colorCustom),
+        home: ChangeNotifierProvider(
+          create: (context) => PhraseProvider(),
+          child: HomePage(),
+        ));
   }
 }

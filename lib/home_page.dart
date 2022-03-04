@@ -16,10 +16,23 @@ class HomePage extends StatefulWidget {
 //http get method
 
 class _HomePageState extends State<HomePage> {
-  final String _quoteURL = "https://zenquotes.io/api/random";
+  var paises = ["Andorra", "Mexico", "Peru", "Canada", "Argentina"];
+
+  var banderas = [
+    "assets/ad.png",
+    "assets/mx.png",
+    "assets/pe.png",
+    "assets/ca.png",
+    "assets/ar.png"
+  ];
+
   String _imageURL = "https://picsum.photos/750/1200";
   String _quote = "";
   String _author = "";
+  int hour = 0, min = 0, sec = 0;
+  final String _quoteURL = "https://zenquotes.io/api/random";
+
+  //late DateTime _epoch;
 
   Future _getQuote() async {
     try {
@@ -30,11 +43,23 @@ class _HomePageState extends State<HomePage> {
         _quote = result[0]['q'] as String;
         _author = result[0]['a'] as String;
         _imageURL = "https://picsum.photos/750/1200";
-
-        return result;
       }
     } catch (e) {
       print(e);
+    }
+
+    Response response = await get(
+        Uri.parse("http://worldtimeapi.org/api/timezone/America/Mexico_City"));
+    if (response.statusCode == 200) {
+      var result = jsonDecode(response.body);
+      print(result);
+      var time = result['datetime'] as String;
+      var hora = time.split(":");
+
+      print(hora);
+
+      //print(_epoch);
+      return result;
     }
   }
 
