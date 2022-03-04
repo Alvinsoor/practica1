@@ -30,7 +30,7 @@ class HourProvider with ChangeNotifier {
             .toUtc();
 
         _time = DateFormat("HH:mm:ss").format(fecha);
-        print(_time);
+        //print(_time);
 
         return result;
       }

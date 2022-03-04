@@ -11,6 +11,8 @@ import 'package:practica1/providers/frase.dart';
 import 'package:practica1/providers/hora.dart';
 import 'package:practica1/providers/imagen.dart';
 
+import 'bloc/hour_bloc.dart';
+
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
@@ -64,7 +66,7 @@ class _HomePageState extends State<HomePage> {
               BlocConsumer<BackgroundBloc, BackgroundState>(
                 builder: (context, state) {
                   if (state is BackgroundErrorState) {
-                    return Center(child: Text("Failure."));
+                    return Center(child: Text("Failure from background."));
                   } else if (state is BackgroundSuccessState) {
                     return Image.memory(state.bytes,
                         fit: BoxFit.cover,
@@ -84,22 +86,39 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.fromLTRB(8.0, 40.0, 8.0, 12.0),
                       child: Column(
                         children: [
-                          Center(
-                              child: Text(
-                            "${paises[ind]}",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                            ),
-                          )),
-                          Center(
-                              child: Text(
-                            "10:10:12",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 50,
-                            ),
-                          )),
+                          BlocConsumer<HourBloc, HourState>(
+                            listener: (context, state) {},
+                            builder: (context, state) {
+                              if (state is HourErrorState) {
+                                return Center(
+                                    child: Text("Failure from Hour."));
+                              } else if (state is HourSuccessState) {
+                                return Column(
+                                  children: [
+                                    Center(
+                                        child: Text(
+                                      "${paises[ind]}",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                      ),
+                                    )),
+                                    Center(
+                                        child: Text(
+                                      state.time,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 50,
+                                      ),
+                                    )),
+                                  ],
+                                );
+                              } else {
+                                return Center(
+                                    child: new CircularProgressIndicator());
+                              }
+                            },
+                          ),
                           SizedBox(height: 150),
                           ListTile(
                             title: Text("I like big booty bitches.",
