@@ -21,7 +21,7 @@ class HourBloc extends Bloc<HourEvent, HourState> {
     on<HourEvent>(loadHour);
   }
 
-  int index = 2;
+  int index = 1;
 
   void loadHour(HourEvent event, Emitter emit) async {
     // TODO: implement event handler

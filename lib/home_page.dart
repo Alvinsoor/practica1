@@ -47,7 +47,15 @@ class _HomePageState extends State<HomePage> {
                             'https://flagcdn.com/32x24/${banderas[index]}.png')),
                     title: Text("${paises[index]}",
                         style: TextStyle(color: Colors.white, fontSize: 16)),
-                    //onTap: () {},
+                    onTap: () {
+                      ind = index;
+                      BlocProvider.of<HourBloc>(context).index = index;
+                      BlocProvider.of<BackgroundBloc>(context)
+                          .add(BackgroundUpdateEvent());
+                      BlocProvider.of<HourBloc>(context).add(HourUpdateEvent());
+                      BlocProvider.of<PhraseBloc>(context)
+                          .add(PhraseUpdateEvent());
+                    },
                   );
                 }),
           ),
@@ -142,12 +150,4 @@ class _HomePageState extends State<HomePage> {
           ),
         ));
   }
-
-  // Future _tapButton(int index) async {
-  //   loaded = false;
-  //   context.read<PhraseProvider>().changeQuote();
-  //   context.read<BackgroundProvider>().changeBackground();
-  //   context.read<HourProvider>().changeCountry(index);
-  //   loaded = true;
-  // }
 }
