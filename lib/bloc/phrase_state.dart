@@ -19,9 +19,10 @@ class PhraseErrorState extends PhraseState {
 }
 
 class PhraseSuccessState extends PhraseState {
-  var data;
+  String quote;
+  String author;
 
-  PhraseSuccessState({required this.data});
+  PhraseSuccessState({required this.quote, required this.author});
   @override
-  List<Object?> get props => [data];
+  List<Object?> get props => [author];
 }

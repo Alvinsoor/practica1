@@ -19,9 +19,9 @@ class HourErrorState extends HourState {
 }
 
 class HourSuccessState extends HourState {
-  var data;
+  final String time;
 
-  HourSuccessState({required this.data});
+  HourSuccessState({required this.time});
   @override
-  List<Object?> get props => [data];
+  List<Object?> get props => [time];
 }

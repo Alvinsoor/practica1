@@ -19,9 +19,10 @@ class BackgroundErrorState extends BackgroundState {
 }
 
 class BackgroundSuccessState extends BackgroundState {
-  var data;
+  //https://www.codegrepper.com/code-examples/dart/flutter+how+to+download+image+url+async+and+display
+  final Uint8List bytes;
 
-  BackgroundSuccessState({required this.data});
+  BackgroundSuccessState({required this.bytes});
   @override
-  List<Object?> get props => [data];
+  List<Object?> get props => [bytes];
 }

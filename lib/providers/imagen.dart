@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
+
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
 
 class BackgroundProvider with ChangeNotifier {
   late String _imageURL;

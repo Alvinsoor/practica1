@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:practica1/bloc/background_bloc.dart';
 import 'package:practica1/providers/frase.dart';
 import 'package:practica1/providers/hora.dart';
 import 'package:practica1/providers/imagen.dart';
@@ -24,101 +25,7 @@ class _HomePageState extends State<HomePage> {
 
   var banderas = ["ad", "mx", "pe", "ca", "ar"];
 
-  String _time = "";
-  final String _quoteURL = "https://zenquotes.io/api/random";
-  final String _imageURL = "https://picsum.photos/750/1200";
-  String _quote = "";
-  String _author = "";
-
   int ind = 1;
-
-  bool loaded = false;
-
-  //late DateTime _epoch;
-
-  Future _getQuote() async {
-    try {
-      Response response = await get(Uri.parse(_quoteURL));
-      if (response.statusCode == 200) {
-        var result = jsonDecode(response.body);
-
-        _quote = result[0]['q'] as String;
-        _author = result[0]['a'] as String;
-      }
-    } catch (e) {
-      print(e);
-    }
-
-    Response response = await get(
-        Uri.parse("http://worldtimeapi.org/api/timezone/America/Mexico_City"));
-    if (response.statusCode == 200) {
-      var result = jsonDecode(response.body);
-
-      var fecha = new DateTime.fromMillisecondsSinceEpoch(
-              (result['unixtime'] + result['raw_offset']) * 1000)
-          .toUtc();
-
-      _time = DateFormat("HH:mm:ss").format(fecha);
-      //print(_time);
-
-      return result;
-    }
-  }
-
-  SafeArea onSuccess() {
-    return SafeArea(
-      child: Stack(
-        children: <Widget>[
-          Image.network(_imageURL,
-              fit: BoxFit.cover,
-              height: MediaQuery.of(context).size.height,
-              color: const Color.fromRGBO(87, 87, 87, 0.7),
-              colorBlendMode: BlendMode.modulate),
-          Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 40.0, 8.0, 12.0),
-                  child: Column(
-                    children: [
-                      Center(
-                          child: Text(
-                        "${paises[ind]}",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                        ),
-                      )),
-                      Center(
-                          child: Text(
-                        _time,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 50,
-                        ),
-                      )),
-                      SizedBox(height: 150),
-                      ListTile(
-                        title: Text(_quote,
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 22)),
-                        subtitle: Text(_author,
-                            style: TextStyle(
-                              color: Colors.white,
-                            )),
-                      )
-                    ],
-                  ),
-                ),
-              ))
-        ],
-      ),
-    );
-  }
-
-  Center onLoading() {
-    return Center(child: new CircularProgressIndicator());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,29 +53,77 @@ class _HomePageState extends State<HomePage> {
                             'https://flagcdn.com/32x24/${banderas[index]}.png')),
                     title: Text("${paises[index]}",
                         style: TextStyle(color: Colors.white, fontSize: 16)),
-                    onTap: () {
-                      _tapButton(index);
-                    },
+                    //onTap: () {},
                   );
                 }),
           ),
         ),
-        frontLayer: FutureBuilder(
-            future: _getQuote(),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> result) {
-              if (result.hasData) {
-                return onSuccess();
-              } else {
-                return onLoading();
-              }
-            }));
+        frontLayer: SafeArea(
+          child: Stack(
+            children: <Widget>[
+              BlocConsumer<BackgroundBloc, BackgroundState>(
+                builder: (context, state) {
+                  if (state is BackgroundErrorState) {
+                    return Center(child: Text("Failure."));
+                  } else if (state is BackgroundSuccessState) {
+                    return Image.memory(state.bytes,
+                        fit: BoxFit.cover,
+                        height: MediaQuery.of(context).size.height,
+                        color: const Color.fromRGBO(87, 87, 87, 0.7),
+                        colorBlendMode: BlendMode.modulate);
+                  } else {
+                    return Center(child: new CircularProgressIndicator());
+                  }
+                },
+                listener: (context, state) {},
+              ),
+              Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 40.0, 8.0, 12.0),
+                      child: Column(
+                        children: [
+                          Center(
+                              child: Text(
+                            "${paises[ind]}",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                            ),
+                          )),
+                          Center(
+                              child: Text(
+                            "10:10:12",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 50,
+                            ),
+                          )),
+                          SizedBox(height: 150),
+                          ListTile(
+                            title: Text("I like big booty bitches.",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 22)),
+                            subtitle: Text("Descartes",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                )),
+                          )
+                        ],
+                      ),
+                    ),
+                  ))
+            ],
+          ),
+        ));
   }
 
-  Future _tapButton(int index) async {
-    loaded = false;
-    context.read<PhraseProvider>().changeQuote();
-    context.read<BackgroundProvider>().changeBackground();
-    context.read<HourProvider>().changeCountry(index);
-    loaded = true;
-  }
+  // Future _tapButton(int index) async {
+  //   loaded = false;
+  //   context.read<PhraseProvider>().changeQuote();
+  //   context.read<BackgroundProvider>().changeBackground();
+  //   context.read<HourProvider>().changeCountry(index);
+  //   loaded = true;
+  // }
 }
