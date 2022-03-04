@@ -1,10 +1,6 @@
 # Practica integradora
 
-## NOT FINISHED
-
-## TODO
-
-- Add onTap functionality to ListView buttons
+![Alt text](https://i.ytimg.com/vi/b_jKBvD4a7s/maxresdefault.jpg)
 
 ### Getting Started
 
