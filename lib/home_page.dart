@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                             builder: (context, state) {
                               if (state is PhraseErrorState) {
                                 return Center(
-                                    child: Text("Failure from Hour."));
+                                    child: Text("Failure from phrase."));
                               } else if (state is PhraseSuccessState) {
                                 return ListTile(
                                   title: Text(state.quote,
