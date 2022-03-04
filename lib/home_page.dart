@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 
 import 'package:backdrop/backdrop.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -46,7 +45,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     Response response = await get(
-        Uri.parse("http://worldtimeapi.org/api/timezone/America/Lima"));
+        Uri.parse("http://worldtimeapi.org/api/timezone/America/Mexico_City"));
     if (response.statusCode == 200) {
       var result = jsonDecode(response.body);
 
@@ -56,11 +55,6 @@ class _HomePageState extends State<HomePage> {
 
       _time = DateFormat("HH:mm:ss").format(fecha);
       print(_time);
-
-      //_time = result['datetime'] as String;
-      //var hora = _time.split(":");
-
-      //print(hora);
 
       return result;
     }
@@ -124,6 +118,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BackdropScaffold(
+        headerHeight: MediaQuery.of(context).size.height / 1.5,
         appBar: BackdropAppBar(
           title: Text("Frase del dia"),
           actions: <Widget>[
@@ -133,17 +128,23 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         backLayer: Container(
-          child: ListView.builder(
-              itemCount: 5,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  leading: Container(
-                      child: Image.asset("assets/${banderas[index]}.png")),
-                  title: Text("${paises[index]}",
-                      style: TextStyle(color: Colors.white, fontSize: 22)),
-                  onTap: () {},
-                );
-              }),
+          child: Container(
+            height: MediaQuery.of(context).size.height / 4.2,
+            child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemCount: 5,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    leading: Container(
+                        child: Image.network(
+                            'https://flagcdn.com/32x24/${banderas[index]}.png')),
+                    title: Text("${paises[index]}",
+                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                    onTap: () {},
+                  );
+                }),
+          ),
         ),
         frontLayer: FutureBuilder(
             future: _getQuote(),
