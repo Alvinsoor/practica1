@@ -1,4 +1,4 @@
-<style>H2{color:Red;}</style>
+
 
 # Practica integradora
 
