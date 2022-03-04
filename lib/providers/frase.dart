@@ -9,8 +9,8 @@ import 'package:http/http.dart';
 class PhraseProvider with ChangeNotifier {
   final String _quoteURL = "https://zenquotes.io/api/random";
 
-  String author = "";
-  String quote = "";
+  String _author = "";
+  String _quote = "";
 
   Future _getQuote() async {
     try {
@@ -19,16 +19,20 @@ class PhraseProvider with ChangeNotifier {
         var result = jsonDecode(response.body);
         print(result);
 
-        author = result[0]["a"];
-        quote = result[0]["q"];
+        _author = result[0]["a"];
+        _quote = result[0]["q"];
       }
     } catch (e) {
       print(e);
     }
   }
 
-  Future<void> changeQuote() async {
+  String get quote => _quote;
+  String get author => _author;
+
+  Future changeQuote() async {
     await _getQuote();
+    print("phrase execute");
 
     notifyListeners();
   }

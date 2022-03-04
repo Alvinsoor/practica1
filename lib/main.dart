@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:practica1/providers/frase.dart';
-import 'package:practica1/providers/imagen.dart';
-import 'package:practica1/providers/hora.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:practica1/bloc/background_bloc.dart';
+import 'package:practica1/bloc/hour_bloc.dart';
+import 'package:practica1/bloc/phrase_bloc.dart';
 import 'home_page.dart';
-import 'package:provider/provider.dart';
 
 Map<int, Color> color = {
   50: Color.fromRGBO(136, 14, 79, .1),
@@ -30,11 +30,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Practica 1',
       theme: ThemeData(primarySwatch: colorCustom),
-      home: MultiProvider(
+      home: MultiBlocProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => PhraseProvider()),
-          ChangeNotifierProvider(create: (context) => BackgroundProvider()),
-          ChangeNotifierProvider(create: (context) => HourProvider())
+          BlocProvider(
+            create: (context) => PhraseBloc()..add(PhraseUpdateEvent()),
+          ),
+          BlocProvider(
+            create: (context) => BackgroundBloc()..add(BackgroundUpdateEvent()),
+          ),
+          BlocProvider(
+            create: (context) => HourBloc()..add(HourUpdateEvent()),
+          ),
         ],
         child: HomePage(),
       ),

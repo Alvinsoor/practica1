@@ -4,8 +4,9 @@
 
 ## TODO
 
-- Move functionality to providers
-- Add onTap functionality to buttons
+- Move functionality to BloCs
+- Add onTap functionality to ListView buttons
+- Remove providers
 
 ### Getting Started
 

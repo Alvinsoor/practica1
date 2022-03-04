@@ -18,10 +18,10 @@ class HourProvider with ChangeNotifier {
 
   String _time = "";
 
-  Future _getQuote() async {
+  Future _getCountry(int index) async {
     try {
       Response response = await get(Uri.parse(
-          "http://worldtimeapi.org/api/timezone/America/Mexico_City"));
+          "http://worldtimeapi.org/api/timezone/${selectedCountry[index]}"));
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
 
@@ -37,5 +37,14 @@ class HourProvider with ChangeNotifier {
     } catch (e) {
       print(e);
     }
+  }
+
+  String get time => _time;
+
+  Future changeCountry(int index) async {
+    await _getCountry(index);
+    print("hour execute with ${index}");
+
+    notifyListeners();
   }
 }

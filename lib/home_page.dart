@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:practica1/providers/frase.dart';
+import 'package:practica1/providers/hora.dart';
+import 'package:practica1/providers/imagen.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -25,6 +29,10 @@ class _HomePageState extends State<HomePage> {
   final String _imageURL = "https://picsum.photos/750/1200";
   String _quote = "";
   String _author = "";
+
+  int ind = 1;
+
+  bool loaded = false;
 
   //late DateTime _epoch;
 
@@ -75,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Center(
                           child: Text(
-                        "Mexico",
+                        "${paises[ind]}",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 22,
@@ -138,7 +146,9 @@ class _HomePageState extends State<HomePage> {
                             'https://flagcdn.com/32x24/${banderas[index]}.png')),
                     title: Text("${paises[index]}",
                         style: TextStyle(color: Colors.white, fontSize: 16)),
-                    onTap: () {},
+                    onTap: () {
+                      _tapButton(index);
+                    },
                   );
                 }),
           ),
@@ -152,5 +162,13 @@ class _HomePageState extends State<HomePage> {
                 return onLoading();
               }
             }));
+  }
+
+  Future _tapButton(int index) async {
+    loaded = false;
+    context.read<PhraseProvider>().changeQuote();
+    context.read<BackgroundProvider>().changeBackground();
+    context.read<HourProvider>().changeCountry(index);
+    loaded = true;
   }
 }
