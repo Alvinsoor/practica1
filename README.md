@@ -1,8 +1,10 @@
-# practica1
+<style>H2{color:Red;}</style>
 
-A new Flutter project.
+# Practica integradora
 
-## Getting Started
+## NOT FINISHED
+
+### Getting Started
 
 This project is a starting point for a Flutter application.
 
