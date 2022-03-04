@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 import 'package:backdrop/backdrop.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -18,13 +19,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var paises = ["Andorra", "Mexico", "Peru", "Canada", "Argentina"];
 
-  var banderas = [
-    "assets/ad.png",
-    "assets/mx.png",
-    "assets/pe.png",
-    "assets/ca.png",
-    "assets/ar.png"
-  ];
+  var banderas = ["ad", "mx", "pe", "ca", "ar"];
+
+  String _time = "";
 
   String _imageURL = "https://picsum.photos/750/1200";
   String _quote = "";
@@ -39,7 +36,7 @@ class _HomePageState extends State<HomePage> {
       Response response = await get(Uri.parse(_quoteURL));
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
-        print(result);
+
         _quote = result[0]['q'] as String;
         _author = result[0]['a'] as String;
         _imageURL = "https://picsum.photos/750/1200";
@@ -49,16 +46,22 @@ class _HomePageState extends State<HomePage> {
     }
 
     Response response = await get(
-        Uri.parse("http://worldtimeapi.org/api/timezone/America/Mexico_City"));
+        Uri.parse("http://worldtimeapi.org/api/timezone/America/Lima"));
     if (response.statusCode == 200) {
       var result = jsonDecode(response.body);
-      print(result);
-      var time = result['datetime'] as String;
-      var hora = time.split(":");
 
-      print(hora);
+      var fecha = new DateTime.fromMillisecondsSinceEpoch(
+              (result['unixtime'] + result['raw_offset']) * 1000)
+          .toUtc();
 
-      //print(_epoch);
+      _time = DateFormat("HH:mm:ss").format(fecha);
+      print(_time);
+
+      //_time = result['datetime'] as String;
+      //var hora = _time.split(":");
+
+      //print(hora);
+
       return result;
     }
   }
@@ -89,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                       )),
                       Center(
                           child: Text(
-                        "12:54:25",
+                        _time,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 50,
@@ -129,8 +132,18 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ),
-        backLayer: Center(
-          child: Text("Back Layer"),
+        backLayer: Container(
+          child: ListView.builder(
+              itemCount: 5,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  leading: Container(
+                      child: Image.asset("assets/${banderas[index]}.png")),
+                  title: Text("${paises[index]}",
+                      style: TextStyle(color: Colors.white, fontSize: 22)),
+                  onTap: () {},
+                );
+              }),
         ),
         frontLayer: FutureBuilder(
             future: _getQuote(),

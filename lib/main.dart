@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:practica1/providers/frase.dart';
+import 'package:practica1/providers/imagen.dart';
+import 'package:practica1/providers/hora.dart';
 import 'home_page.dart';
 import 'package:provider/provider.dart';
 
@@ -27,11 +28,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Practica 1',
-        theme: ThemeData(primarySwatch: colorCustom),
-        home: ChangeNotifierProvider(
-          create: (context) => PhraseProvider(),
-          child: HomePage(),
-        ));
+      title: 'Practica 1',
+      theme: ThemeData(primarySwatch: colorCustom),
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => PhraseProvider()),
+          ChangeNotifierProvider(create: (context) => BackgroundProvider()),
+          ChangeNotifierProvider(create: (context) => HourProvider())
+        ],
+        child: HomePage(),
+      ),
+    );
   }
 }
