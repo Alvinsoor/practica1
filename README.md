@@ -1,8 +1,11 @@
-
-
 # Practica integradora
 
 ## NOT FINISHED
+
+## TODO
+
+- Move functionality to providers
+- Add onTap functionality to buttons
 
 ### Getting Started
 

@@ -21,12 +21,10 @@ class _HomePageState extends State<HomePage> {
   var banderas = ["ad", "mx", "pe", "ca", "ar"];
 
   String _time = "";
-
-  String _imageURL = "https://picsum.photos/750/1200";
+  final String _quoteURL = "https://zenquotes.io/api/random";
+  final String _imageURL = "https://picsum.photos/750/1200";
   String _quote = "";
   String _author = "";
-  int hour = 0, min = 0, sec = 0;
-  final String _quoteURL = "https://zenquotes.io/api/random";
 
   //late DateTime _epoch;
 
@@ -38,7 +36,6 @@ class _HomePageState extends State<HomePage> {
 
         _quote = result[0]['q'] as String;
         _author = result[0]['a'] as String;
-        _imageURL = "https://picsum.photos/750/1200";
       }
     } catch (e) {
       print(e);
@@ -54,7 +51,7 @@ class _HomePageState extends State<HomePage> {
           .toUtc();
 
       _time = DateFormat("HH:mm:ss").format(fecha);
-      print(_time);
+      //print(_time);
 
       return result;
     }
@@ -140,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                         child: Image.network(
                             'https://flagcdn.com/32x24/${banderas[index]}.png')),
                     title: Text("${paises[index]}",
-                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                        style: TextStyle(color: Colors.white, fontSize: 16)),
                     onTap: () {},
                   );
                 }),
